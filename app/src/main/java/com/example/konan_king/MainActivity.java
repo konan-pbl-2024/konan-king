@@ -17,7 +17,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button startButton = findViewById(R.id.start_button);  // 例: スタートボタン
+        Button startButton = findViewById(R.id.start_button);  //例: スタートボタン
 
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override

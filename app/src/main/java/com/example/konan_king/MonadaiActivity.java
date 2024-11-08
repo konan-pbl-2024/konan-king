@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 public class MonadaiActivity extends AppCompatActivity {
 
-    private TextView timeTextView;  // 経過時間を表示するTextView
+    private TextView timeTextView;  //経過時間を表示するTextView
     private TextView quizSentTextView;  // 文字列を表示するTextView
     private int seconds = 0;  // 経過時間（秒）
     private int currentCharIndex = 0;  // 表示する文字列のインデックス
