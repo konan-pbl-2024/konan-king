@@ -13,7 +13,19 @@
         android:theme="@style/Theme.Konanking"
         tools:targetApi="31">
         <activity
+            android:name=".MatigaiActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AnswerActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SeikaiActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
+            android:exported="true" />
+        <activity
+            android:name=".MonadaiActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
