@@ -1,9 +1,7 @@
 package com.example.konan_king;
 
 import androidx.appcompat.app.AppCompatActivity;
-import android.app.ProgressDialog;
-import android.content.Intent;
-import android.os.AsyncTask;
+import android.content.Intent;  // Intentをインポート
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -12,13 +10,12 @@ import android.widget.TextView;
 
 public class MonadaiActivity extends AppCompatActivity {
 
-    private TextView timeTextView;  // 経過時間を表示するTextView
+    private TextView timeTextView;  //経過時間を表示するTextView
     private TextView quizSentTextView;  // 文字列を表示するTextView
     private int seconds = 0;  // 経過時間（秒）
     private int currentCharIndex = 0;  // 表示する文字列のインデックス
     private String targetText = "これはサンプルの日本語文章です。ここに文字列が表示されます。50字程度の文章として表示されることを目的としています。";
     private Handler handler = new Handler();  // メインスレッドに遅延実行するためのHandler
-    private ProgressDialog progressDialog;  // プログレスダイアログ
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +30,7 @@ public class MonadaiActivity extends AppCompatActivity {
         Button ans3 = findViewById(R.id.ans3);
         Button ans4 = findViewById(R.id.ans4);
 
+        // 文字列を表示するTextViewの参照を取得
         TextView textView1 = findViewById(R.id.quiz_sent);
         textView1.setText("OK! NICE!!");
 
@@ -40,16 +38,6 @@ public class MonadaiActivity extends AppCompatActivity {
         timeTextView = findViewById(R.id.text_test);  // timeTextViewのIDを使用
         // 文字列を表示するTextViewの参照を取得
         quizSentTextView = findViewById(R.id.quiz_sent);  // quiz_sentのIDを使用
-
-        // ProgressDialogの設定
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setTitle("読み込み中");
-        progressDialog.setMessage("データを読み込んでいます...");
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.show();
-
-        // 非同期処理を行うAsyncTaskを起動
-        new LoadDataTask().execute();
 
         // 1秒ごとに経過時間を更新するRunnableを作成
         Runnable timeRunnable = new Runnable() {
@@ -66,7 +54,7 @@ public class MonadaiActivity extends AppCompatActivity {
             }
         };
 
-        // 500ミリ秒ごとに文字列を1文字ずつ表示するRunnableを作成
+        // 100ミリ秒ごとに文字列を1文字ずつ表示するRunnableを作成
         Runnable textRunnable = new Runnable() {
             @Override
             public void run() {
@@ -80,7 +68,7 @@ public class MonadaiActivity extends AppCompatActivity {
                     currentCharIndex++;
                 }
 
-                // 100ミリ秒後に再度このRunnableを実行（500ミリ秒から100ミリ秒に変更）
+                // 100ミリ秒後に再度このRunnableを実行
                 handler.postDelayed(this, 100);  // 100ミリ秒 = 0.1秒
             }
         };
@@ -135,26 +123,5 @@ public class MonadaiActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-    }
-
-    // 非同期処理を行うAsyncTaskクラス
-    private class LoadDataTask extends AsyncTask<String, Void, Void> {
-
-        @Override
-        protected Void doInBackground(String... params) {
-            try {
-                // ロード処理の模擬（例: データ取得やファイル読み込みなど）
-                Thread.sleep(2000); // 2秒間の待機（ローディングの模擬）
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-            // 非同期処理が完了したらProgressDialogを閉じる
-            progressDialog.dismiss();
-        }
     }
 }
