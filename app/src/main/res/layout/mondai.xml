@@ -88,4 +88,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/quiz_num"
         app:layout_constraintVertical_bias="0.681" />
+
+    <TextView
+        android:id="@+id/text_test"
+        android:layout_width="82dp"
+        android:layout_height="50dp"
+        android:text="TextView"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/quiz_button"
+        app:layout_constraintHorizontal_bias="0.33"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/quiz_sent"
+        app:layout_constraintVertical_bias="0.872" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
