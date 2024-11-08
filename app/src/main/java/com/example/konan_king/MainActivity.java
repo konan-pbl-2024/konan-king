@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
-    ProgressDialog progressDialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,15 +25,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
-
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setTitle("");
-        progressDialog.setMessage("ロード中...");
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.show();
-
-        AsyncTaskClass task = new AsyncTaskClass(progressDialog);
-        task.execute("");
 
 
 
