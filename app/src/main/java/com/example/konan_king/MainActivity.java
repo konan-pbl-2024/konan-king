@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
     ProgressDialog progressDialog;
@@ -13,6 +14,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         progressDialog = new ProgressDialog(this);
         progressDialog.setTitle("");
         progressDialog.setMessage("ロード中...");
@@ -21,5 +23,6 @@ public class MainActivity extends AppCompatActivity {
 
         AsyncTaskClass task = new AsyncTaskClass(progressDialog);
         task.execute("");
+
     }
 }
