@@ -164,34 +164,35 @@ public class MonadaiActivity extends AppCompatActivity {
         ans1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                nextQuestion();
+                nextQuestion(1);
             }
         });
 
         ans2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                nextQuestion();
+
+                nextQuestion(2);
             }
         });
 
         ans3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                nextQuestion();
+                nextQuestion(3);
             }
         });
 
         ans4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                nextQuestion();
+                nextQuestion(4);
             }
         });
     }
 
     // 次の問題に進むメソッド
-    private void nextQuestion() {
+    private void nextQuestion(int num) {
         currentQuestion++;  // 問題番号をインクリメント
 
         // 問題番号が10を超えたら終了画面に遷移
@@ -207,5 +208,29 @@ public class MonadaiActivity extends AppCompatActivity {
             intent.putExtra("seconds", seconds);  // 継続する経過時間を渡す
             startActivity(intent);  // 次の問題に進む
         }
+
+
+        // 次の問題に進むためのIntentを作成
+        String[] currentQuizData = quizDataList.get(currentQuestion-1);
+        if (num == Integer.parseInt(currentQuizData[5].trim())){
+            Intent intent = new Intent(MonadaiActivity.this, SeikaiActivity.class);
+            intent.putExtra("currentQuestion", currentQuestion);  // 更新された問題番号を渡す
+            intent.putExtra("seconds", seconds);  // 継続する経過時間を渡す
+            startActivity(intent);  // 次の問題に進む
+        } else {
+            Intent intent = new Intent(MonadaiActivity.this, MatigaiActivity.class);
+            intent.putExtra("currentQuestion", currentQuestion);  // 更新された問題番号を渡す
+            intent.putExtra("seconds", seconds);  // 継続する経過時間を渡す
+            startActivity(intent);  // 次の問題に進む
+        }
+
+
+//        if (currentQuizIndex < quizDataList.size()) {
+//            currentQuizIndex++;  // 次の問題へ進む
+//            currentCharIndex = 0;  // 文字表示をリセット
+//            handler.post(textRunnable);  // 次の問題を表示
+//        }
+
+
     }
 }
