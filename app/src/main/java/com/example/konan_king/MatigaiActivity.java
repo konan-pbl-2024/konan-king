@@ -12,6 +12,7 @@ public class MatigaiActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_matigai);
+        int currentQuestion = getIntent().getIntExtra("currentQuestion", 0);
 
         Button next2 = findViewById(R.id.next2);
 
