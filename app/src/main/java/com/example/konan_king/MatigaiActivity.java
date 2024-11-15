@@ -13,6 +13,7 @@ public class MatigaiActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_matigai);
         int currentQuestion = getIntent().getIntExtra("currentQuestion", 0);
+        int seconds = getIntent().getIntExtra("seconds", 0);
 
         Button next2 = findViewById(R.id.next2);
 
@@ -21,6 +22,7 @@ public class MatigaiActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(MatigaiActivity.this, MonadaiActivity.class);
                 intent.putExtra("currentQuestion", currentQuestion);  // 問題番号を更新するためのフラグを渡す
+                intent.putExtra("seconds", seconds);
                 startActivity(intent);
             }
         });

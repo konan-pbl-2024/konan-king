@@ -13,6 +13,7 @@ public class SeikaiActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_seikai);
         int currentQuestion = getIntent().getIntExtra("currentQuestion", 0);
+        int seconds = getIntent().getIntExtra("seconds", 0);
 
         Button next1 = findViewById(R.id.next1);
 
@@ -21,6 +22,8 @@ public class SeikaiActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(SeikaiActivity.this, MonadaiActivity.class);
                 intent.putExtra("currentQuestion", currentQuestion);  // 問題番号を更新するためのフラグを渡す
+                intent.putExtra("seconds", seconds);
+
                 startActivity(intent);
             }
         });
