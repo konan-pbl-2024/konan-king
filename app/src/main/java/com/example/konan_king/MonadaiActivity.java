@@ -127,17 +127,32 @@ public class MonadaiActivity extends AppCompatActivity {
         handler.post(textRunnable);  // 文字列を1文字ずつ表示するRunnable
 
         // quiz_buttonを押したときに4択を表示する
+        // quiz_buttonを押したときの処理を修正
+        // quiz_buttonを押したときの処理を修正
         quiz_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // quiz_buttonを押したときに経過時間を停止
-                handler.removeCallbacks(timeRunnable);  // 時間更新のRunnableを停止
+                // textRunnableを停止して、問題文の表示を止める
+                handler.removeCallbacks(textRunnable);
 
-                // 問題を順番に表示
+                // 現在の問題データを取得
                 if (currentQuizIndex < quizDataList.size()) {
-                    currentQuizIndex++;  // 次の問題へ進む
-                    currentCharIndex = 0;  // 文字表示をリセット
-                    handler.post(textRunnable);  // 次の問題を表示
+                    String[] currentQuizData = quizDataList.get(currentQuizIndex);
+
+                    // 選択肢を表示
+                    ans1.setVisibility(View.VISIBLE);
+                    ans2.setVisibility(View.VISIBLE);
+                    ans3.setVisibility(View.VISIBLE);
+                    ans4.setVisibility(View.VISIBLE);
+
+                    // 選択肢のテキストを設定
+                    ans1.setText(currentQuizData[1]);
+                    ans2.setText(currentQuizData[2]);
+                    ans3.setText(currentQuizData[3]);
+                    ans4.setText(currentQuizData[4]);
+
+                    // quiz_buttonを無効化（連続で押されないようにする）
+                    quiz_button.setEnabled(false);
                 }
             }
         });
