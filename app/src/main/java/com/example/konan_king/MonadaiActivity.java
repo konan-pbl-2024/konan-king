@@ -7,7 +7,6 @@ import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,6 +24,7 @@ public class MonadaiActivity extends AppCompatActivity {
     private int currentQuizIndex = 0;  // 現在の問題のインデックス
     private Handler handler = new Handler();  // メインスレッドに遅延実行するためのHandler
     private int currentQuestion = 1;  // 問題番号（デフォルトは1）
+    private Runnable timeRunnable; // 経過時間を更新するRunnable
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,9 +36,10 @@ public class MonadaiActivity extends AppCompatActivity {
         quizSentTextView = findViewById(R.id.quiz_sent);  // 文字列を表示するTextView
         textView = findViewById(R.id.quiz_num);  // 問題番号を表示するTextView
 
-        // 問題番号をIntentから取得
+        // 問題番号と経過時間をIntentから取得
         Intent intent = getIntent();
         currentQuestion = intent.getIntExtra("currentQuestion", 1);  // 既定値は1
+        seconds = intent.getIntExtra("seconds", 0);  // 既定値は0秒
 
         // 問題番号が10問を超えないように制限
         if (currentQuestion > 10) {
@@ -48,12 +49,9 @@ public class MonadaiActivity extends AppCompatActivity {
         // 問題番号を表示
         textView.setText("第" + currentQuestion + "問");
 
-        // ボタンや他のUI要素の初期化
-        Button okButton = findViewById(R.id.ans1);
-      
         // 問題文の読み取り
         try {
-            InputStream in = getResources().getAssets().open("sample.txt");
+            InputStream in = getResources().getAssets().open("mondaoi1.txt");
             BufferedReader br = new BufferedReader(new InputStreamReader(in));
             String line;
             while ((line = br.readLine()) != null) {
@@ -75,17 +73,11 @@ public class MonadaiActivity extends AppCompatActivity {
         Button ans3 = findViewById(R.id.ans3);
         Button ans4 = findViewById(R.id.ans4);
 
-        // 文字列を表示するTextViewの参照を取得
-        TextView textView1 = findViewById(R.id.quiz_sent);
-        textView1.setText("OK! NICE!!");
-
         // 経過時間を表示するTextViewの参照を取得
         timeTextView = findViewById(R.id.text_test);
-        // 文字列を表示するTextViewの参照を取得
-        quizSentTextView = findViewById(R.id.quiz_sent);
 
         // 1秒ごとに経過時間を更新するRunnableを作成
-        Runnable timeRunnable = new Runnable() {
+        timeRunnable = new Runnable() {
             @Override
             public void run() {
                 // 経過時間を更新
@@ -100,19 +92,14 @@ public class MonadaiActivity extends AppCompatActivity {
             @Override
             public void run() {
 
-                if (currentCharIndex < targetText.length()) {
-                    String displayedText = targetText.substring(0, currentCharIndex + 1);
-                    quizSentTextView.setText(displayedText);
-
                 // 現在の問題データを取得
                 String[] currentQuizData = quizDataList.get(currentQuizIndex);
                 String targetText = currentQuizData[0];  // 問題文
-                String displayedText = targetText.substring(0, currentCharIndex + 1);  // 1文字ずつ表示
-                quizSentTextView.setText(displayedText);  // 表示更新
 
                 // インデックスを次に進める
                 if (currentCharIndex < targetText.length()) {
-
+                    String displayedText = targetText.substring(0, currentCharIndex + 1);
+                    quizSentTextView.setText(displayedText);
                     currentCharIndex++;
                 } else {
                     // 問題文の表示が終わったら、選択肢を表示する
@@ -143,6 +130,9 @@ public class MonadaiActivity extends AppCompatActivity {
         quiz_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // quiz_buttonを押したときに経過時間を停止
+                handler.removeCallbacks(timeRunnable);  // 時間更新のRunnableを停止
+
                 // 問題を順番に表示
                 if (currentQuizIndex < quizDataList.size()) {
                     currentQuizIndex++;  // 次の問題へ進む
@@ -152,78 +142,49 @@ public class MonadaiActivity extends AppCompatActivity {
             }
         });
 
-
         // 各選択肢を押したときに次の問題に進む処理
         ans1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MonadaiActivity.this, MonadaiActivity.class);
-                intent.putExtra("currentQuestion", currentQuestion + 1);  // 次の問題番号を渡す
-                startActivity(intent);
-
-        // 各選択肢を押したときに画面遷移する
-        ans1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String[] currentQuizData = quizDataList.get(currentQuizIndex);
-                if ("1".equals(currentQuizData[5])) {
-                    // 正解ならSeikaiActivityへ遷移
-                    Intent intent = new Intent(MonadaiActivity.this, SeikaiActivity.class);
-                    startActivity(intent);
-                } else {
-                    // 間違いならMatigaiActivityへ遷移
-                    Intent intent = new Intent(MonadaiActivity.this, MatigaiActivity.class);
-                    startActivity(intent);
-                }
-
+                nextQuestion();
             }
         });
 
         ans2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                Intent intent = new Intent(MonadaiActivity.this, MonadaiActivity.class);
-                intent.putExtra("currentQuestion", currentQuestion + 1);  // 次の問題番号を渡す
-                startActivity(intent);
-
-                String[] currentQuizData = quizDataList.get(currentQuizIndex);
-                if ("2".equals(currentQuizData[5])) {
-                    // 正解ならSeikaiActivityへ遷移
-                    Intent intent = new Intent(MonadaiActivity.this, SeikaiActivity.class);
-                    startActivity(intent);
-                } else {
-                    // 間違いならMatigaiActivityへ遷移
-                    Intent intent = new Intent(MonadaiActivity.this, MatigaiActivity.class);
-                    startActivity(intent);
-                }
-
+                nextQuestion();
             }
         });
 
         ans3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                Intent intent = new Intent(MonadaiActivity.this, MonadaiActivity.class);
-                intent.putExtra("currentQuestion", currentQuestion + 1);  // 次の問題番号を渡す
-                startActivity(intent);
+                nextQuestion();
             }
         });
 
         ans4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MonadaiActivity.this, MonadaiActivity.class);
-                intent.putExtra("currentQuestion", currentQuestion + 1);  // 次の問題番号を渡す
-                startActivity(intent);
+                nextQuestion();
             }
         });
     }
+
+    // 次の問題に進むメソッド
+    private void nextQuestion() {
+        currentQuestion++;  // 問題番号をインクリメント
+
+        // 問題番号が10を超えないように制限
+        if (currentQuestion > 10) {
+            currentQuestion = 10;
+        }
+
+        // 次の問題に進むためのIntentを作成
+        Intent intent = new Intent(MonadaiActivity.this, MonadaiActivity.class);
+        intent.putExtra("currentQuestion", currentQuestion);  // 更新された問題番号を渡す
+        intent.putExtra("seconds", seconds);  // 継続する経過時間を渡す
+        startActivity(intent);  // 次の問題に進む
+    }
 }
-
-                String[] currentQuizData = quizDataList.get(currentQuizIndex);
-                if ("3".equals(currentQuizData[5])) {
-                    // 正解ならSeikaiActivityへ遷移
-                    Intent intent = new Intent(MonadaiActivity.this,
-
