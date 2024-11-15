@@ -20,7 +20,7 @@ public class MatigaiActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MatigaiActivity.this, MonadaiActivity.class);
-                intent.putExtra("NEXT_QUESTION", true);  // 問題番号を更新するためのフラグを渡す
+                intent.putExtra("currentQuestion", currentQuestion);  // 問題番号を更新するためのフラグを渡す
                 startActivity(intent);
             }
         });
