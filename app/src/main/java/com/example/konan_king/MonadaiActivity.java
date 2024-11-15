@@ -8,6 +8,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
 public class MonadaiActivity extends AppCompatActivity {
 
     private TextView timeTextView;  //経過時間を表示するTextView
@@ -21,6 +26,20 @@ public class MonadaiActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mondai);
+
+
+        // 問題文の読み取り
+        try {
+            InputStream in = getResources().getAssets().open("sample.txt");
+            BufferedReader br = new BufferedReader(new InputStreamReader(in));
+            String line = br.readLine();
+            String columns[] = line.split(",");
+            for (String c: columns) {
+                targetText = columns[c];
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         // ボタンや他のUI要素の初期化（必要に応じて）
         Button okButton = findViewById(R.id.ans1);
