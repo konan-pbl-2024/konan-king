@@ -126,6 +126,7 @@ public class MonadaiActivity extends AppCompatActivity {
         handler.post(textRunnable);  // 文字列を1文字ずつ表示するRunnable
 
         // quiz_buttonを押したときに4択を表示する
+        // quiz_buttonを押したときに4択を表示する
         quiz_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -156,6 +157,7 @@ public class MonadaiActivity extends AppCompatActivity {
                 }
             }
         });
+
 
 
         // 各選択肢を押したときに次の問題に進む処理
@@ -189,15 +191,24 @@ public class MonadaiActivity extends AppCompatActivity {
         });
     }
 
-
     // 次の問題に進むメソッド
     private void nextQuestion(int num) {
         currentQuestion++;  // 問題番号をインクリメント
 
-        // 問題番号が10を超えないように制限
+        // 問題番号が10を超えたら終了画面に遷移
         if (currentQuestion > 10) {
-            currentQuestion = 10;
+            Intent intent = new Intent(MonadaiActivity.this, SyuuryouActivity.class);
+            intent.putExtra("seconds", seconds);  // 経過時間を渡す
+            startActivity(intent);  // 終了画面に遷移
+            finish();  // 現在のActivityを終了
+        } else {
+            // 次の問題に進む
+            Intent intent = new Intent(MonadaiActivity.this, SeikaiActivity.class);
+            intent.putExtra("currentQuestion", currentQuestion);  // 更新された問題番号を渡す
+            intent.putExtra("seconds", seconds);  // 継続する経過時間を渡す
+            startActivity(intent);  // 次の問題に進む
         }
+
 
         // 次の問題に進むためのIntentを作成
         String[] currentQuizData = quizDataList.get(currentQuestion-1);
