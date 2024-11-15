@@ -1,6 +1,7 @@
 package com.example.konan_king;
 
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -50,10 +51,10 @@ public class MonadaiActivity extends AppCompatActivity {
 
         // ボタンや他のUI要素の初期化
         Button okButton = findViewById(R.id.ans1);
-      
+
         // 問題文の読み取り
         try {
-            InputStream in = getResources().getAssets().open("sample.txt");
+            InputStream in = getResources().getAssets().open("mondaoi1.txt");
             BufferedReader br = new BufferedReader(new InputStreamReader(in));
             String line;
             while ((line = br.readLine()) != null) {
@@ -100,19 +101,16 @@ public class MonadaiActivity extends AppCompatActivity {
             @Override
             public void run() {
 
-                if (currentCharIndex < targetText.length()) {
-                    String displayedText = targetText.substring(0, currentCharIndex + 1);
-                    quizSentTextView.setText(displayedText);
-
                 // 現在の問題データを取得
                 String[] currentQuizData = quizDataList.get(currentQuizIndex);
                 String targetText = currentQuizData[0];  // 問題文
-                String displayedText = targetText.substring(0, currentCharIndex + 1);  // 1文字ずつ表示
-                quizSentTextView.setText(displayedText);  // 表示更新
+                //String displayedText = targetText.substring(0, currentCharIndex + 1);  // 1文字ずつ表示
+                //quizSentTextView.setText(displayedText);  // 表示更新
 
                 // インデックスを次に進める
                 if (currentCharIndex < targetText.length()) {
-
+                    String displayedText = targetText.substring(0, currentCharIndex + 1);
+                    quizSentTextView.setText(displayedText);
                     currentCharIndex++;
                 } else {
                     // 問題文の表示が終わったら、選択肢を表示する
@@ -124,6 +122,7 @@ public class MonadaiActivity extends AppCompatActivity {
                     ans2.setVisibility(View.VISIBLE);
                     ans3.setVisibility(View.VISIBLE);
                     ans4.setVisibility(View.VISIBLE);
+
 
                     // 選択肢を設定
                     ans1.setText(currentQuizData[1]);
@@ -143,12 +142,16 @@ public class MonadaiActivity extends AppCompatActivity {
         quiz_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 問題を順番に表示
+//                 問題を順番に表示
                 if (currentQuizIndex < quizDataList.size()) {
                     currentQuizIndex++;  // 次の問題へ進む
                     currentCharIndex = 0;  // 文字表示をリセット
                     handler.post(textRunnable);  // 次の問題を表示
                 }
+                ans1.setVisibility(View.VISIBLE);
+                ans2.setVisibility(View.VISIBLE);
+                ans3.setVisibility(View.VISIBLE);
+                ans4.setVisibility(View.VISIBLE);
             }
         });
 
@@ -161,8 +164,53 @@ public class MonadaiActivity extends AppCompatActivity {
                 intent.putExtra("currentQuestion", currentQuestion + 1);  // 次の問題番号を渡す
                 startActivity(intent);
 
+            }
+        });
         // 各選択肢を押したときに画面遷移する
         ans1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String[] currentQuizData = quizDataList.get(currentQuizIndex);
+                if (currentQuizIndex < quizDataList.size()) {
+                    currentQuizIndex++;  // 次の問題へ進む
+                    currentCharIndex = 0;  // 文字表示をリセット
+                    handler.post(textRunnable);  // 次の問題を表示
+
+                }
+                if (currentQuizData[5] == "1") {
+                    // 正解ならSeikaiActivityへ遷移
+                    Intent intent = new Intent(MonadaiActivity.this, SeikaiActivity.class);
+                    startActivity(intent);
+                } else {
+                    // 間違いならMatigaiActivityへ遷移
+                    Intent intent = new Intent(MonadaiActivity.this, MatigaiActivity.class);
+                    startActivity(intent);
+                }
+
+            }
+        });
+
+        ans2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String[] currentQuizData = quizDataList.get(currentQuizIndex);
+                if ("1".equals(currentQuizData[5])) {
+                    // 正解ならSeikaiActivityへ遷移
+                    Intent intent = new Intent(MonadaiActivity.this, SeikaiActivity.class);
+                    intent.putExtra("currentQuestion", currentQuestion + 1);  // 次の問題番号を渡す
+                    startActivity(intent);
+
+                } else {
+                    // 間違いならMatigaiActivityへ遷移
+                    Intent intent = new Intent(MonadaiActivity.this, MatigaiActivity.class);
+                    intent.putExtra("currentQuestion", currentQuestion + 1);  // 次の問題番号を渡す
+                    startActivity(intent);
+                }
+
+            }
+        });
+
+        ans3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String[] currentQuizData = quizDataList.get(currentQuizIndex);
@@ -179,16 +227,11 @@ public class MonadaiActivity extends AppCompatActivity {
             }
         });
 
-        ans2.setOnClickListener(new View.OnClickListener() {
+        ans4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                Intent intent = new Intent(MonadaiActivity.this, MonadaiActivity.class);
-                intent.putExtra("currentQuestion", currentQuestion + 1);  // 次の問題番号を渡す
-                startActivity(intent);
-
                 String[] currentQuizData = quizDataList.get(currentQuizIndex);
-                if ("2".equals(currentQuizData[5])) {
+                if ("1".equals(currentQuizData[5])) {
                     // 正解ならSeikaiActivityへ遷移
                     Intent intent = new Intent(MonadaiActivity.this, SeikaiActivity.class);
                     startActivity(intent);
@@ -201,29 +244,47 @@ public class MonadaiActivity extends AppCompatActivity {
             }
         });
 
-        ans3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+//        ans2.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+////                Intent intent = new Intent(MonadaiActivity.this, MonadaiActivity.class);
+////                intent.putExtra("currentQuestion", currentQuestion + 1);  // 次の問題番号を渡す
+////                startActivity(intent);
+//
+//                String[] currentQuizData = quizDataList.get(currentQuizIndex);
+//
+////                if ("2".equals(currentQuizData[5])) {
+////                    // 正解ならSeikaiActivityへ遷移
+////                    Intent intent = new Intent(MonadaiActivity.this, SeikaiActivity.class);
+////                    startActivity(intent);
+////                } else {
+////                    // 間違いならMatigaiActivityへ遷移
+////                    Intent intent = new Intent(MonadaiActivity.this, MatigaiActivity.class);
+////                    startActivity(intent);
+////                }
+//
+//            }
+//        });
+//
+//        ans3.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                Intent intent = new Intent(MonadaiActivity.this, MonadaiActivity.class);
+//                intent.putExtra("currentQuestion", currentQuestion + 1);  // 次の問題番号を渡す
+//                startActivity(intent);
+//            }
+//        });
+//
+//        ans4.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(MonadaiActivity.this, MonadaiActivity.class);
+//                intent.putExtra("currentQuestion", currentQuestion + 1);  // 次の問題番号を渡す
+//                startActivity(intent);
+//            }
+//        });
 
-                Intent intent = new Intent(MonadaiActivity.this, MonadaiActivity.class);
-                intent.putExtra("currentQuestion", currentQuestion + 1);  // 次の問題番号を渡す
-                startActivity(intent);
-            }
-        });
-
-        ans4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MonadaiActivity.this, MonadaiActivity.class);
-                intent.putExtra("currentQuestion", currentQuestion + 1);  // 次の問題番号を渡す
-                startActivity(intent);
-            }
-        });
     }
 }
-
-                String[] currentQuizData = quizDataList.get(currentQuizIndex);
-                if ("3".equals(currentQuizData[5])) {
-                    // 正解ならSeikaiActivityへ遷移
-                    Intent intent = new Intent(MonadaiActivity.this,
-

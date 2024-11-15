@@ -12,6 +12,7 @@ public class SeikaiActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_seikai);
+        int currentQuestion = getIntent().getIntExtra("currentQuestion", 0);
 
         Button next1 = findViewById(R.id.next1);
 
@@ -19,7 +20,7 @@ public class SeikaiActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(SeikaiActivity.this, MonadaiActivity.class);
-                intent.putExtra("NEXT_QUESTION", true);  // 問題番号を更新するためのフラグを渡す
+                intent.putExtra("currentQuestion", currentQuestion);  // 問題番号を更新するためのフラグを渡す
                 startActivity(intent);
             }
         });
