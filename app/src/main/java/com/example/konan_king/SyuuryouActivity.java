@@ -1,9 +1,11 @@
 package com.example.konan_king;
 
 import androidx.appcompat.app.AppCompatActivity;
-import android.os.Bundle;
-import android.widget.TextView;
 import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 public class SyuuryouActivity extends AppCompatActivity {
 
@@ -23,5 +25,15 @@ public class SyuuryouActivity extends AppCompatActivity {
 
         // 経過時間を表示
         textView1.setText("経過時間: " + seconds + "秒");
+
+        // ボタンの初期化
+        Button button = findViewById(R.id.Title);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // ActivityBへ遷移
+                startActivity(new Intent(SyuuryouActivity.this, MainActivity.class));
+            }
+        });
     }
 }
